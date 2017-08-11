@@ -1,18 +1,13 @@
-/*
- * This program performs merge sort using recursion top down on input file elements
- * To execute
- 	javac MergeSortTopDown.java
-	java MergeSortTopDown <file_name>
- */
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
-public class MergeSortTopDown {
-	//no. of comparisons
+public class MergeSortTopDownWithCutoff {
 	static int count = 0;
-
+	
 	public static void main(String[] args) {
 		String fileSortInput="";	
 		List<Integer> inputList = new ArrayList<Integer>();
@@ -86,12 +81,41 @@ public class MergeSortTopDown {
 	
 	//this function call sort recursively until hi=lo
 	private static void sort(List<Integer> inputList, List<Integer> aux, int lo, int hi)
-	{
-		if (hi <= lo) return;
+	{		
+		//use cutoff = 10
+		if (hi <= lo + 9) 
+		{ 
+			InsertionSort(inputList, lo, hi); 
+			return; 
+		}
 		int mid = lo + (hi - lo) / 2;
 		sort(inputList, aux, lo, mid);
 		sort(inputList, aux, mid+1, hi);
 		merge(inputList, aux, lo, mid, hi);
-	}	
+	}
 	
+	/*This method is used to perform Insertion sort 
+	 * on the input array of numbers 
+	 */
+	static void InsertionSort(List<Integer> a, int lo, int hi)
+	{
+		 int i,j,temp;
+		 for(i=lo;i<=hi;i++)
+		 {
+			 //sort all numbers from i to 1
+			 for(j=i;j>lo;j--)
+			 {
+				 //if inputArray[j-1]>inputArray[j] then swap the numbers
+				 if(a.get(j-1)>a.get(j))
+				 {
+					 temp = a.get(j-1);
+					 a.set(j-1, a.get(j));
+					 a.set(j, temp);
+				 }
+				 count++;
+			 }
+		 }
+		 return;
+	}
+
 }
